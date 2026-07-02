@@ -38,9 +38,9 @@ class SettingsViewModel {
             UserDefaults.standard.set(false, forKey: "hasLoadedStarterData")
             
             HapticManager.shared.notification(.success)
-            showAlert(title: String(localized: "Data Reset"), message: String(localized: "All data has been deleted. Restart the app to begin fresh."))
+            showAlert(title: String.localizing( "Data Reset"), message: String.localizing( "All data has been deleted. Restart the app to begin fresh."))
         } catch {
-            showAlert(title: String(localized: "Error"), message: error.localizedDescription)
+            showAlert(title: String.localizing( "Error"), message: error.localizedDescription)
         }
     }
     
@@ -120,7 +120,7 @@ class SettingsViewModel {
     }
     
     func importCSV(from url: URL, context: ModelContext) {
-        guard url.startAccessingSecurityScopedResource() else { showAlert(title: String(localized: "Error"), message: String(localized: "Permission denied to read file.")); return }
+        guard url.startAccessingSecurityScopedResource() else { showAlert(title: String.localizing( "Error"), message: String.localizing( "Permission denied to read file.")); return }
         defer { url.stopAccessingSecurityScopedResource() }
         
         do {
@@ -144,9 +144,9 @@ class SettingsViewModel {
                 }
             }
             try? context.save()
-            showAlert(title: String(localized: "Import Successful!"), message: String(localized: "Restored \(importCount) meals to your diary."))
+            showAlert(title: String.localizing( "Import Successful!"), message: String.localizing( "Restored \(importCount) meals to your diary."))
         } catch {
-            showAlert(title: String(localized: "Import Error"), message: error.localizedDescription)
+            showAlert(title: String.localizing( "Import Error"), message: error.localizedDescription)
         }
     }
 }

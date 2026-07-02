@@ -40,7 +40,21 @@ struct AddMealView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(uiColor: .systemGroupedBackground),
+                        Color.green.opacity(0.04),
+                        Color.yellow.opacity(0.04),
+                        Color(uiColor: .systemGroupedBackground)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                .adaptiveBackgroundTexture()
+
+                VStack(spacing: 0) {
                 if !Calendar.current.isDateInToday(selectedDate) {
                     HStack {
                         Image(systemName: "clock.fill")
@@ -95,6 +109,8 @@ struct AddMealView: View {
                     }
                 }
                 .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
                 .searchable(text: $viewModel.searchText, prompt: "Search...")
                 .overlay {
                     if viewModel.isFetchingAPI {
@@ -110,9 +126,8 @@ struct AddMealView: View {
                         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
                     }
                 }
+                }
             }
-            .background(Color(UIColor.systemGroupedBackground))
-            .adaptiveBackgroundTexture()
             .navigationTitle(viewModel.selectedTab == 0 ? "Food Library" : "Recipe Library")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -228,6 +243,7 @@ struct AddMealView: View {
                             viewModel.navigateToCreateFood = true
                         } label: { Label("Edit", systemImage: "pencil") }.tint(.blue)
                     }
+                    .listRowBackground(Color.clear)
                 }
             }
         }

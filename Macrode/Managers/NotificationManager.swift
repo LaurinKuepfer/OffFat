@@ -7,25 +7,25 @@ class NotificationManager {
     private init() {}
     
     private let supplementNagMessages = [
-        String(localized: "💊 Hey! Did you forget your supplements today?"),
-        String(localized: "Time to take your vitamins! ⚡️"),
-        String(localized: "Your supplements are waiting for you. ⏰"),
-        String(localized: "Boost your day! Don't forget your supplements. 💊")
+        String.localizing( "💊 Hey! Did you forget your supplements today?"),
+        String.localizing( "Time to take your vitamins! ⚡️"),
+        String.localizing( "Your supplements are waiting for you. ⏰"),
+        String.localizing( "Boost your day! Don't forget your supplements. 💊")
     ]
     
     private let eveningSuccessMessages = [
-        String(localized: "Goal Achieved! 🎉 You hit your calorie target today."),
-        String(localized: "Incredible work today! 🌟 You nailed your macros."),
-        String(localized: "Perfect day! Keep up the great consistency. 🔥"),
-        String(localized: "You crushed it today! Rest up for tomorrow. 🌙")
+        String.localizing( "Goal Achieved! 🎉 You hit your calorie target today."),
+        String.localizing( "Incredible work today! 🌟 You nailed your macros."),
+        String.localizing( "Perfect day! Keep up the great consistency. 🔥"),
+        String.localizing( "You crushed it today! Rest up for tomorrow. 🌙")
     ]
     
     private func eveningRemainingMessages(cals: Int) -> [String] {
         return [
-            String(localized: "Dinner time! 🍽️ You have \(cals) kcal left to hit your goal."),
-            String(localized: "Evening check-in 🌙 You can still eat \(cals) kcal today!"),
-            String(localized: "Almost there! You've got \(cals) kcal remaining for a late snack. 🍎"),
-            String(localized: "Don't starve yourself! You still have \(cals) kcal to hit your target. 🎯")
+            String.localizing( "Dinner time! 🍽️ You have \(cals) kcal left to hit your goal."),
+            String.localizing( "Evening check-in 🌙 You can still eat \(cals) kcal today!"),
+            String.localizing( "Almost there! You've got \(cals) kcal remaining for a late snack. 🍎"),
+            String.localizing( "Don't starve yourself! You still have \(cals) kcal to hit your target. 🎯")
         ]
     }
     
@@ -49,11 +49,11 @@ class NotificationManager {
         // 1. Water Reminders (Fixed but useful)
         let waterHours = [10, 12, 14, 16, 18]
         let waterMessages = [
-            String(localized: "Hydration Check 💧 Grab a glass of water!"),
-            String(localized: "Stay sharp! 🧠 Time for some water."),
-            String(localized: "Midday thirst? 🚰 Keep that water target in mind."),
-            String(localized: "Almost evening! 💧 Don't forget to hydrate."),
-            String(localized: "Last water check! 🚰 Finish strong.")
+            String.localizing( "Hydration Check 💧 Grab a glass of water!"),
+            String.localizing( "Stay sharp! 🧠 Time for some water."),
+            String.localizing( "Midday thirst? 🚰 Keep that water target in mind."),
+            String.localizing( "Almost evening! 💧 Don't forget to hydrate."),
+            String.localizing( "Last water check! 🚰 Finish strong.")
         ]
         
         for (index, hour) in waterHours.enumerated() {

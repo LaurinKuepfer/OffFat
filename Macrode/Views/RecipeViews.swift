@@ -310,7 +310,7 @@ struct EditRecipeView: View {
             Form {
                 Section(header: Text("Recipe Details")) {
                     TextField("Recipe Name", text: $name).focused($isInputActive)
-                    Picker("Category", selection: $category) { ForEach(categories, id: \.self) { cat in Text(cat).tag(cat) } }
+                    Picker("Category", selection: $category) { ForEach(categories, id: \.self) { cat in Text(LocalizedStringKey(cat)).tag(cat) } }
                     HStack { Text("Prep Time (min)"); Spacer(); TextField("e.g. 15", value: $prepTimeMinutes, format: .number).keyboardType(.numberPad).focused($isInputActive).multilineTextAlignment(.trailing) }
                 }
                 

@@ -121,9 +121,9 @@ class ReviewEngine {
     
     private static func calculateBestMacro(stats: ReviewStats) -> (name: String, ratio: Double) {
         let macros = [
-            (name: String(localized: "Protein"), ratio: stats.proRatio),
-            (name: String(localized: "Carbs"), ratio: stats.carbRatio),
-            (name: String(localized: "Healthy Fats"), ratio: stats.fatRatio)
+            (name: String.localizing( "Protein"), ratio: stats.proRatio),
+            (name: String.localizing( "Carbs"), ratio: stats.carbRatio),
+            (name: String.localizing( "Healthy Fats"), ratio: stats.fatRatio)
         ]
         
         let validMacros = macros.filter { $0.ratio > 0 }
@@ -131,7 +131,7 @@ class ReviewEngine {
             return best
         }
         
-        return (String(localized: "Protein"), 0.0)
+        return (String.localizing( "Protein"), 0.0)
     }
     
     private static func calculateWeightChange(validLogs: [DailyLog]) -> Double? {
@@ -147,27 +147,38 @@ class ReviewEngine {
     
     private static func generateMotivationalMessage(successfulDays: Int, daysToCount: Int, isEmpty: Bool) -> String {
         if isEmpty {
-            return String(localized: "You don't have enough data yet. Keep logging your meals to see your review!")
+            return String.localizing( "You don't have enough data yet. Keep logging your meals to see your review!")
         }
         let successRate = Double(successfulDays) / Double(daysToCount)
         if successRate >= 0.8 {
-            return String(localized: "Absolutely stellar work! You are building unbreakable habits. Keep this momentum going!")
+            return String.localizing( "Absolutely stellar work! You are building unbreakable habits. Keep this momentum going!")
         } else if successRate >= 0.5 {
-            return String(localized: "Great effort! You had some fantastic days. Let's aim to turn those few slip-ups into wins next time.")
+            return String.localizing( "Great effort! You had some fantastic days. Let's aim to turn those few slip-ups into wins next time.")
         } else {
-            return String(localized: "Progress isn't always linear. What matters is that you're here and tracking. Let's focus on winning tomorrow.")
+            return String.localizing( "Progress isn't always linear. What matters is that you're here and tracking. Let's focus on winning tomorrow.")
         }
     }
     
     private static func generateAnalysisMessage(avgTarget: Double, avgIntake: Double) -> String {
         let diff = avgIntake - avgTarget
         if diff < -200 {
-            return String(localized: "You were way under your goal.")
+            return String.localizing( "You were way under your goal.")
         } else if diff > 50 {
-            return String(localized: "You were above your goal.")
+            return String.localizing( "You were above your goal.")
         } else {
-            return String(localized: "You were just perfect!")
+            return String.localizing( "You were just perfect!")
         }
     }
 }
 
+
+extension String {
+    static func localizing(_ key: String.LocalizationValue) -> String {
+        let appLanguage = UserDefaults(suiteName: "group.com.kuepferlaurin.macrode")?.string(forKey: "appLanguage") ?? "system"
+        if appLanguage == "system" {
+            return String(localized: key)
+        } else {
+            return String(localized: key, locale: Locale(identifier: appLanguage))
+        }
+    }
+}

@@ -18,14 +18,30 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(uiColor: .systemGroupedBackground),
+                        Color.orange.opacity(0.04),
+                        Color.mint.opacity(0.04),
+                        Color(uiColor: .systemGroupedBackground)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                .adaptiveBackgroundTexture()
+
+                List {
                 preferencesSection
                 integrationsSection
                 dataSection
                 aboutSection
                 dangerZoneSection
             }
+            .scrollContentBackground(.hidden)
             .listStyle(.insetGrouped)
+            }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
             .fileExporter(
@@ -35,8 +51,8 @@ struct SettingsView: View {
                 defaultFilename: "Macrode_Backup_\(Date().formatted(date: .numeric, time: .omitted))"
             ) { result in
                 switch result {
-                case .success(_): viewModel.showAlert(title: String(localized: "Export Successful!"), message: String(localized: "Your data has been saved."))
-                case .failure(let error): viewModel.showAlert(title: String(localized: "Export Failed"), message: error.localizedDescription)
+                case .success(_): viewModel.showAlert(title: String.localizing( "Export Successful!"), message: String.localizing( "Your data has been saved."))
+                case .failure(let error): viewModel.showAlert(title: String.localizing( "Export Failed"), message: error.localizedDescription)
                 }
             }
             .fileImporter(
@@ -48,7 +64,7 @@ struct SettingsView: View {
                 case .success(let urls):
                     guard let url = urls.first else { return }
                     viewModel.importCSV(from: url, context: context)
-                case .failure(let error): viewModel.showAlert(title: String(localized: "Import Failed"), message: error.localizedDescription)
+                case .failure(let error): viewModel.showAlert(title: String.localizing( "Import Failed"), message: error.localizedDescription)
                 }
             }
             .alert(viewModel.alertTitle, isPresented: $viewModel.showingAlert) { 
@@ -96,7 +112,7 @@ struct SettingsView: View {
                             NotificationManager.shared.scheduleDynamicNotifications(meals: allMeals, log: todayLog, supplements: supplements)
                         } else {
                             isProactiveCoachEnabled = false
-                            viewModel.showAlert(title: String(localized: "Permission Denied"), message: String(localized: "Please enable notifications for Macrode in your iPhone Settings."))
+                            viewModel.showAlert(title: String.localizing( "Permission Denied"), message: String.localizing( "Please enable notifications for Macrode in your iPhone Settings."))
                         }
                     }
                 } else {
@@ -129,9 +145,9 @@ struct SettingsView: View {
                 HapticManager.shared.impact(.light)
                 HealthKitManager.shared.requestAuthorization { success, error in
                     if success { 
-                        viewModel.showAlert(title: String(localized: "Connected!"), message: String(localized: "Macrode will now sync your meals directly to Apple Health.")) 
+                        viewModel.showAlert(title: String.localizing( "Connected!"), message: String.localizing( "Macrode will now sync your meals directly to Apple Health.")) 
                     } else { 
-                        viewModel.showAlert(title: String(localized: "Error"), message: error?.localizedDescription ?? String(localized: "Could not connect to Apple Health.")) 
+                        viewModel.showAlert(title: String.localizing( "Error"), message: error?.localizedDescription ?? String.localizing( "Could not connect to Apple Health.")) 
                     }
                 }
             }) {
@@ -204,7 +220,7 @@ struct SettingsView: View {
     
     // MARK: - Components
     
-    private func widgetPreviewCard(icon: String, title: String, subtitle: String, color: Color) -> some View {
+    private func widgetPreviewCard(icon: String, title: LocalizedStringKey, subtitle: LocalizedStringKey, color: Color) -> some View {
         VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title2)

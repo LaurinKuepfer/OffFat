@@ -44,8 +44,8 @@
 
 "Data Management" = "Datenverwaltung";
 "Connect to Apple Health" = "Mit Apple Health verbinden";
-"Export Backup (.csv)" = "Backup exportieren (.csv)";
-"Restore from Backup" = "Backup wiederherstellen";
+"Export Backup (.csv)" = "Backup Exportieren (.csv)";
+"Restore from Backup" = "Aus Backup wiederherstellen";
 "Apple Health Integration" = "Apple Health Integration";
 "Eat Back Workout Calories" = "Trainingskalorien aufbrauchen";
 "Forgiveness Safety Floor" = "Sicherheitsuntergrenze";
@@ -183,13 +183,13 @@
 "Data Management" = "Datenverwaltung";
 "Because Macrode is 100% offline, use these buttons to backup your data or move it to a new iPhone." = "Da Macrode zu 100% offline ist, nutze diese Buttons für Backups oder einen iPhone-Wechsel.";
 "Connect to Apple Health" = "Mit Apple Health verbinden";
-"Export Backup (.csv)" = "Backup exportieren (.csv)";
-"Restore from Backup" = "Backup wiederherstellen";
+"Export Backup (.csv)" = "Backup Exportieren (.csv)";
+"Restore from Backup" = "Aus Backup wiederherstellen";
 "Forgiveness Safety Floor" = "Sicherheitsgrenze";
 "The Weekly Bank will never drop your daily target below this minimum calorie limit, even after a large surplus." = "Die Wochenbank senkt dein Kalorienziel niemals unter dieses Limit, selbst nach einem großen Überschuss.";
 "Minimum Calories" = "Minimum Kalorien";
 "Proactive Coach" = "Proaktiver Coach";
-"Receive offline daily reminders to take your supplements and hit your protein goals." = "Erhalte Offline-Erinnerungen für deine Supplements und Proteinziele.";
+"Receive offline daily reminders to take your supplements and hit your protein goals." = "Erhalte tägliche Erinnerungen, um deine Nahrungsergänzungsmittel einzunehmen und dein Proteinziel zu erreichen.";
 "Enable Daily Coach" = "Täglichen Coach aktivieren";
 "Help" = "Hilfe";
 "Show Quick Guide" = "Kurzanleitung anzeigen";
@@ -208,15 +208,15 @@
 "Add Water" = "Wasser hinzufügen";
 "Track Supplement" = "Supplement eintragen";
 "Timeline" = "Zeitachse";
-"TDEE: %lld" = "TDEE: %lld";
-"Social Day" = "Social Day";
+"TDEE: %lld" = "Gesamtumsatz: %lld";
+"Social Day" = "Gesellschaftstag";
 "Global Results" = "Globale Ergebnisse";
 "No Results" = "Keine Ergebnisse";
 "Could not find anything for '%@'." = "Konnte nichts für '%@' finden.";
 "%lld kcal" = "%lld kcal";
-"%lldg P" = "%lldg P";
-"%lldg C" = "%lldg C";
-"%lldg F" = "%lldg F";
+"%lldg P" = "%lld g P";
+"%lldg C" = "%lld g K";
+"%lldg F" = "%lld g F";
 
 // New Onboarding & Info Strings
 "Energy Balance" = "Energiebilanz";
@@ -226,14 +226,14 @@
 "Log a Banana 🍌 (105 kcal)" = "Eine Banane loggen 🍌 (105 kcal)";
 "Awesome! You're ready." = "Klasse! Du bist startklar.";
 "Enter Macrode" = "Macrode betreten";
-"Calculating True Metabolism..." = "Echter Stoffwechsel wird berechnet...";
-"Needs 21 days of tracked data. Currently %lld/21 days." = "Benötigt 21 Tage getrackte Daten. Aktuell %lld/21 Tage.";
+"Calculating True Metabolism..." = "Berechne wahren Stoffwechsel...";
+"Needs 21 days of tracked data. Currently %lld/21 days." = "Benötigt 21 Tage an Daten. Aktuell %lld/21 Tage.";
 "True Metabolism (TDEE)" = "Echter Stoffwechsel (TDEE)";
 "TDEE stands for Total Daily Energy Expenditure. It represents the total number of calories you burn in a day.\n\nMacrode calculates this by analyzing your logged calories and body weight over a 21-day period to find your exact metabolic rate, eliminating the need for generic formulas." = "TDEE steht für den gesamten täglichen Energieverbrauch. Es entspricht der Gesamtzahl der Kalorien, die du an einem Tag verbrennst.\n\nMacrode berechnet dies, indem deine geloggten Kalorien und dein Körpergewicht über einen Zeitraum von 21 Tagen analysiert werden, um deinen genauen Stoffwechsel zu ermitteln. So werden pauschale Formeln überflüssig.";
 "Weekly Calories & Balance Engine" = "Wöchentliche Kalorien & Balance-Engine";
 "The Weekly Bank tracks your daily surplus or deficit and rolls it over into the upcoming days.\n\nFor example, if you eat 300 calories over your target on Saturday, your targets for the remaining days of the week will automatically adjust downward to keep your weekly average perfectly aligned with your goal." = "Die Wochenbank erfasst deinen täglichen Überschuss oder dein Defizit und überträgt dies auf die kommenden Tage.\n\nWenn du zum Beispiel am Samstag 300 Kalorien über deinem Ziel liegst, werden deine Ziele für die restlichen Tage der Woche automatisch nach unten angepasst, um deinen Wochenschnitt perfekt auf dein Ziel abzustimmen.";
-"Today's Timeline" = "Heutige Zeitachse";
-"Ready to fuel your day? Log your first meal!" = "Bereit für Energie? Logge deine erste Mahlzeit!";
+"Today's Timeline" = "Heutige Zeitleiste";
+"Ready to fuel your day? Log your first meal!" = "Bereit für den Tag? Protokolliere deine erste Mahlzeit!";
 "Relog Meal" = "Mahlzeit erneut loggen";
 "Breakfast" = "Frühstück";
 "Lunch" = "Mittagessen";
@@ -366,10 +366,10 @@
 "Let's add more variety to your library to unlock better combos!" = "Füge deiner Bibliothek mehr Vielfalt hinzu, um bessere Kombos freizuschalten!";
 "Log %lld kcal" = "%lld kcal loggen";
 "Logging for %@" = "Loggen für %@";
-"Long-press your Home Screen → tap **+** in the top-left → search **Macrode** to add widgets." = "Lange auf den Home-Bildschirm drücken → oben links auf **+** tippen → nach **Macrode** suchen, um Widgets hinzuzufügen.";
+"Long-press your Home Screen → tap **+** in the top-left → search **Macrode** to add widgets." = "Halte deinen Home-Bildschirm gedrückt → tippe auf **+** oben links → suche nach **Macrode**, um Widgets hinzuzufügen.";
 "Macro Calculator" = "Makro-Rechner";
 "Macro Champion" = "Makro-Champion";
-"Macrode is 100% offline. Use backups to transfer your data to a new device." = "Macrode ist 100% offline. Nutze Backups, um deine Daten auf ein neues Gerät zu übertragen.";
+"Macrode is 100% offline. Use backups to transfer your data to a new device." = "Macrode ist 100% offline. Verwende Backups, um deine Daten auf ein neues Gerät zu übertragen.";
 "Macrode will now sync your meals directly to Apple Health." = "Macrode synchronisiert nun deine Mahlzeiten direkt mit Apple Health.";
 "Macros" = "Makros";
 "Macros will auto-update based on the new weight." = "Makros werden basierend auf dem neuen Gewicht automatisch aktualisiert.";
@@ -406,17 +406,17 @@
 "Smart Suggester 🪄" = "Schlauer Vorschlag 🪄";
 "Source Code (GitHub)" = "Quellcode (GitHub)";
 "Stay sharp! 🧠 Time for some water." = "Bleib wachsam! 🧠 Zeit für etwas Wasser.";
-"Sync meals, water, and weight to Apple Health automatically." = "Mahlzeiten, Wasser und Gewicht automatisch mit Apple Health synchronisieren.";
+"Sync meals, water, and weight to Apple Health automatically." = "Synchronisiere Mahlzeiten, Wasser und Gewicht automatisch mit Apple Health.";
 "System" = "System";
 "Take a flexible day. High energy intake won't trigger warnings, but targets will gracefully adapt later." = "Nimm dir einen flexiblen Tag. Hohe Kalorienzufuhr löst keine Warnungen aus, aber Ziele passen sich später sanft an.";
 "The Big Picture" = "Das große Ganze";
 "These blocks will not appear on your dashboard." = "Diese Blöcke werden nicht auf deinem Dashboard angezeigt.";
 "This will permanently delete all your logged meals, daily logs, food library, recipes, and supplements. Export a backup first!" = "Dadurch werden alle deine geloggten Mahlzeiten, Tageslogs, die Nahrungsmittelbibliothek, Rezepte und Supplements dauerhaft gelöscht. Erstelle zuerst ein Backup!";
-"This will permanently delete all your meals, logs, and settings. This cannot be undone." = "Dadurch werden alle deine Mahlzeiten, Logs und Einstellungen dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.";
+"This will permanently delete all your meals, logs, and settings. This cannot be undone." = "Dies löscht dauerhaft alle deine Mahlzeiten, Protokolle und Einstellungen. Dies kann nicht rückgängig gemacht werden.";
 "Time to take your vitamins! ⚡️" = "Zeit für deine Vitamine! ⚡️";
 "Total Cooked Weight (Optional)" = "Gesamtes Kochgewicht (Optional)";
 "Total Nutrition (Per 1 Serving)" = "Gesamtnährwerte (Pro 1 Portion)";
-"Track your weight trends over time." = "Verfolge deine Gewichtsverläufe im Laufe der Zeit.";
+"Track your weight trends over time." = "Verfolge deine Gewichtstrends im Laufe der Zeit.";
 "Try adding single-macro foods like lean chicken, rice, or olive oil. We'll find the perfect combination for your remaining targets!" = "Versuche, Nahrungsmittel mit einzelnen Makros wie mageres Hähnchen, Reis oder Olivenöl hinzuzufügen. Wir finden die perfekte Kombination für deine restlichen Ziele!";
 "Verified" = "Verifiziert";
 "Water Target (ml)" = "Wasserziel (ml)";
@@ -446,7 +446,7 @@
 "Water Tracker" = "Wasser-Tracker";
 "Fasting Timer" = "Fasten-Timer";
 "Frequent Meals" = "Häufige Mahlzeiten";
-"Supplements" = "Supplements";
+"Supplements" = "Nahrungsergänzung";
 "Meal Timeline" = "Mahlzeiten-Zeitachse";
 
 // Conditional Strings
@@ -484,10 +484,10 @@
 "Here is a look back at your past %lld days." = "Hier ist ein Rückblick auf deine letzten %lld Tage.";
 "Log %lld kcal" = "%lld kcal loggen";
 "Logging for %@" = "Tagebuch für %@";
-"Needs 21 days of tracked data. Currently %lld/21 days." = "Benötigt 21 Tage getrackter Daten. Aktuell %lld/21 Tage.";
+"Needs 21 days of tracked data. Currently %lld/21 days." = "Benötigt 21 Tage an Daten. Aktuell %lld/21 Tage.";
 "Restored %lld meals to your diary." = "Habe %lld Mahlzeiten in deinem Tagebuch wiederhergestellt.";
 "Search '%@' Globally" = "Global nach '%@' suchen";
-"TDEE: %lld" = "TDEE: %lld";
+"TDEE: %lld" = "Gesamtumsatz: %lld";
 "Weight for %@" = "Gewicht für %@";
 "You hit %lld%% of your target on average." = "Du hast im Durchschnitt %lld%% deines Ziels erreicht.";
 "You stayed within your calorie target on %lld out of %lld days." = "Du bist an %lld von %lld Tagen innerhalb deines Kalorienziels geblieben.";
@@ -497,12 +497,28 @@
 "%lld min" = "%lld Min.";
 "%@ Macros" = "%@ Makros";
 "%lldg C" = "%lldg K";
-"%lldg F" = "%lldg F";
-"%lldg P" = "%lldg P";
+"%lldg F" = "%lld g F";
+"%lldg P" = "%lld g P";
 "%lld kcal" = "%lld kcal";
-"%lldg" = "%lldg";
+"%lldg" = "%lld g";
 "%lldP | %lldC | %lldF" = "%lldP | %lldK | %lldF";
 "•  %lldg P | %lldg C | %lldg F" = "•  %lldg P | %lldg K | %lldg F";
 "N: %@" = "N: %@";
-"%lld / %lldg" = "%lld / %lldg";
+"%lld / %lldg" = "%lld / %lld g";
 "/ %lld" = "/ %lld";
+
+"Remaining kcal" = "Übrige kcal";
+"P / C / F split" = "P / K / F Verteilung";
+"Daily intake" = "Tägliche Aufnahme";
+"Healthy Fats" = "Gesunde Fette";
+"You don't have enough data yet. Keep logging your meals to see your review!" = "Du hast noch nicht genug Daten. Protokolliere weiterhin deine Mahlzeiten, um deinen Rückblick zu sehen!";
+"Absolutely stellar work! You are building unbreakable habits. Keep this momentum going!" = "Absolut fantastische Arbeit! Du baust unzerbrechliche Gewohnheiten auf. Behalte diesen Schwung bei!";
+"Great effort! You had some fantastic days. Let's aim to turn those few slip-ups into wins next time." = "Toller Einsatz! Du hattest einige fantastische Tage. Lass uns versuchen, diese wenigen Ausrutscher beim nächsten Mal in Siege zu verwandeln.";
+"Progress isn't always linear. What matters is that you're here and tracking. Let's focus on winning tomorrow." = "Fortschritt ist nicht immer linear. Was zählt, ist, dass du hier bist und trackst. Konzentrieren wir uns darauf, morgen zu gewinnen.";
+"You were way under your goal." = "Du warst weit unter deinem Ziel.";
+"You were above your goal." = "Du warst über deinem Ziel.";
+"You were just perfect!" = "Du warst einfach perfekt!";
+"Food Name (e.g. Greek Yogurt 2%)" = "Lebensmittelname (z.B. Griechischer Joghurt 2%)";
+"Optional" = "Optional";
+"Unit Name (e.g., Slice, Burger)" = "Name der Einheit (z.B. Scheibe, Burger)";
+"g/ml" = "g/ml";

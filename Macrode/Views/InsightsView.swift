@@ -64,8 +64,22 @@ struct InsightsView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(uiColor: .systemGroupedBackground),
+                        Color.purple.opacity(0.04),
+                        Color.pink.opacity(0.04),
+                        Color(uiColor: .systemGroupedBackground)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                .adaptiveBackgroundTexture()
+
+                ScrollView {
+                    VStack(spacing: 24) {
                     
                     if currentStreak > 0 { streakBanner }
                     
@@ -84,8 +98,6 @@ struct InsightsView: View {
                 .padding(.vertical, 20)
                 .padding(.bottom, 80)
             }
-            .background(Color(UIColor.systemGroupedBackground))
-            .adaptiveBackgroundTexture()
             .navigationTitle("Insights")
             .onAppear {
                 ReviewManager.shared.checkAndPromptReview(currentStreak: currentStreak)
@@ -115,6 +127,7 @@ struct InsightsView: View {
             }
         }
     }
+}
     
     private var reviewSection: some View {
         HStack(spacing: 16) {
