@@ -18,9 +18,68 @@ class DashboardViewModel {
         let logsData = allDailyLogs.map { DailyLogData(from: $0) }
         let mealsData = allConsumedMeals.map { ConsumedMealData(from: $0) }
         
-        let tdee = MetabolismEngine.calculateTrueTDEE(dailyLogs: logsData, allMeals: mealsData)
+        let tdeeResult = MetabolismEngine.calculateTrueTDEE(dailyLogs: logsData, allMeals: mealsData)
+        self.cachedTDEE = tdeeResult
         
-        self.cachedTDEE = tdee
+        // Dynamic Coaching
+        let isAdaptiveCoachingEnabled = UserDefaults.standard.bool(forKey: "isAdaptiveCoachingEnabled")
+        let templateStr = UserDefaults.standard.string(forKey: "dietTemplate") ?? DietTemplate.balanced.rawValue
+        let template = DietTemplate(rawValue: templateStr) ?? .balanced
+        
+        if isAdaptiveCoachingEnabled, let trueTdee = tdeeResult.tdee {
+            let startOfDay = Calendar.current.startOfDay(for: selectedDate)
+            if let todayLog = allDailyLogs.first(where: { Calendar.current.isDate($0.date, inSameDayAs: startOfDay) }) {
+                
+                var newCalorieTarget = trueTdee
+                if userGoal == .lose { newCalorieTarget -= 500 }
+                if userGoal == .gain { newCalorieTarget += 300 }
+                
+                let weight = todayLog.bodyWeight ?? 70.0
+                let proteinPerKg: Double
+                let fatPercentage: Double
+                
+                switch template {
+                case .balanced:
+                    proteinPerKg = (userGoal == .gain) ? 2.0 : 1.6 // simplified
+                    fatPercentage = 0.25
+                case .lowCarb:
+                    proteinPerKg = 2.2
+                    fatPercentage = 0.35
+                case .keto:
+                    proteinPerKg = 1.8
+                    fatPercentage = 0.70
+                case .highProtein:
+                    proteinPerKg = 2.4
+                    fatPercentage = 0.25
+                }
+                
+                var proteinTarget = round(weight * proteinPerKg)
+                var fatTarget = round((newCalorieTarget * fatPercentage) / 9.0)
+                let remainingCals = newCalorieTarget - (proteinTarget * 4.0) - (fatTarget * 9.0)
+                var carbsTarget = 0.0
+                
+                if remainingCals < 0 {
+                    let totalReqCals = (proteinTarget * 4.0) + (fatTarget * 9.0)
+                    let scaleFactor = newCalorieTarget / totalReqCals
+                    proteinTarget = round(proteinTarget * scaleFactor)
+                    fatTarget = round(fatTarget * scaleFactor)
+                } else {
+                    carbsTarget = round(remainingCals / 4.0)
+                }
+                
+                // Only update if there is a significant change (e.g. > 50 kcal) to avoid constant micro-updates
+                if abs(todayLog.calorieTarget - round(newCalorieTarget)) > 50 {
+                    todayLog.calorieTarget = round(newCalorieTarget)
+                    todayLog.proteinTarget = proteinTarget
+                    todayLog.carbsTarget = carbsTarget
+                    todayLog.fatTarget = fatTarget
+                    
+                    if let context = todayLog.modelContext {
+                        try? context.save()
+                    }
+                }
+            }
+        }
     }
     
     var frequentMeals: [ConsumedMeal] = []

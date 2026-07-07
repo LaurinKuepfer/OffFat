@@ -12,6 +12,7 @@ struct DailyDashboardView: View {
     
     // Layout customization properties
     @AppStorage("activeDashboardBlocks") private var activeBlocksRaw: String = DashboardBlock.allCases.map { $0.rawValue }.joined(separator: ",")
+    @AppStorage("enableMicronutrients") private var enableMicronutrients = false
     @State private var showingEditLayout = false
     
     @State private var viewModel = DashboardViewModel()
@@ -43,6 +44,14 @@ struct DailyDashboardView: View {
     private var consumedProtein: Double { selectedDateMeals.reduce(0) { $0 + $1.protein } }
     private var consumedCarbs: Double { selectedDateMeals.reduce(0) { $0 + $1.carbs } }
     private var consumedFat: Double { selectedDateMeals.reduce(0) { $0 + $1.fat } }
+    
+    private var consumedVitaminA: Double { selectedDateMeals.reduce(0) { $0 + ($1.vitaminA ?? 0) } }
+    private var consumedVitaminC: Double { selectedDateMeals.reduce(0) { $0 + ($1.vitaminC ?? 0) } }
+    private var consumedVitaminD: Double { selectedDateMeals.reduce(0) { $0 + ($1.vitaminD ?? 0) } }
+    private var consumedCalcium: Double { selectedDateMeals.reduce(0) { $0 + ($1.calcium ?? 0) } }
+    private var consumedIron: Double { selectedDateMeals.reduce(0) { $0 + ($1.iron ?? 0) } }
+    private var consumedPotassium: Double { selectedDateMeals.reduce(0) { $0 + ($1.potassium ?? 0) } }
+    private var consumedMagnesium: Double { selectedDateMeals.reduce(0) { $0 + ($1.magnesium ?? 0) } }
     
     private var baseTarget: Double {
         if let tdee = viewModel.cachedTDEE?.tdee {
@@ -77,12 +86,17 @@ struct DailyDashboardView: View {
     
     var body: some View {
         VStack(spacing: 20) {
+            tdeeHeader
+            
             ForEach(activeBlocks, id: \.self) { block in
                 switch block {
                 case .energyOverview:
                     energySection
                 case .macros:
                     macrosSection
+                    if enableMicronutrients {
+                        micronutrientsSection
+                    }
                 case .quickActions:
                     actionsSection
                 case .water:
@@ -165,33 +179,41 @@ struct DailyDashboardView: View {
     
     // MARK: - Sections
     
+    @ViewBuilder
+    private var tdeeHeader: some View {
+        if let tdeeResult = viewModel.cachedTDEE {
+            if let tdee = tdeeResult.tdee {
+                HStack(spacing: 6) {
+                    Image(systemName: "bolt.fill").foregroundColor(.yellow)
+                    ProgressView(value: 21.0, total: 21.0)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .yellow))
+                        .frame(width: 40)
+                    Text("\(Int(tdee)) kcal")
+                        .font(.caption2).fontWeight(.bold).foregroundColor(.yellow)
+                        .contentTransition(.numericText())
+                }
+                .padding(.horizontal, 8).padding(.vertical, 4)
+                .background(Color.yellow.opacity(0.1))
+                .cornerRadius(6)
+            } else {
+                HStack(spacing: 6) {
+                    Image(systemName: "bolt.badge.clock.fill").foregroundColor(.yellow)
+                    ProgressView(value: Double(tdeeResult.validDaysLogged), total: 21.0)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .yellow))
+                        .frame(width: 40)
+                    Text("\(tdeeResult.validDaysLogged)/21")
+                        .font(.caption2).fontWeight(.bold).foregroundColor(.yellow)
+                }
+                .padding(.horizontal, 8).padding(.vertical, 4)
+                .background(Color.yellow.opacity(0.1))
+                .cornerRadius(6)
+            }
+        }
+    }
+    
     private var energySection: some View {
         FlipCardView {
             VStack(spacing: 6) {
-                if let tdeeResult = viewModel.cachedTDEE {
-                    if let tdee = tdeeResult.tdee {
-                        Label("TDEE: \(Int(tdee))", systemImage: "bolt.fill")
-                            .font(.caption2).fontWeight(.bold)
-                            .foregroundColor(.yellow)
-                            .contentTransition(.numericText())
-                            .padding(.horizontal, 8).padding(.vertical, 4)
-                            .background(Color.yellow.opacity(0.1))
-                            .cornerRadius(6)
-                    } else {
-                        HStack(spacing: 6) {
-                            Image(systemName: "bolt.badge.clock.fill").foregroundColor(.yellow)
-                            ProgressView(value: Double(tdeeResult.validDaysLogged), total: 21.0)
-                                .progressViewStyle(LinearProgressViewStyle(tint: .yellow))
-                                .frame(width: 40)
-                            Text("\(tdeeResult.validDaysLogged)/21")
-                                .font(.caption2).fontWeight(.bold).foregroundColor(.yellow)
-                        }
-                        .padding(.horizontal, 8).padding(.vertical, 4)
-                        .background(Color.yellow.opacity(0.1))
-                        .cornerRadius(6)
-                    }
-                }
-                
                 CalorieHUD(consumed: consumedCalories, target: dynamicTarget, isSocialDay: currentLog.isSocialDay)
                     .animation(.spring(response: 0.4, dampingFraction: 0.6), value: consumedCalories)
                     .animation(.spring(response: 0.4, dampingFraction: 0.6), value: dynamicTarget)
@@ -255,6 +277,36 @@ struct DailyDashboardView: View {
             .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 6)
             .padding(.horizontal, 24)
         }
+    }
+    
+    private var micronutrientsSection: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Image(systemName: "pills.fill").foregroundColor(.purple)
+                Text("Micronutrients")
+                    .font(.headline)
+                Spacer()
+            }
+            .padding(.horizontal, 24)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    MicroCard(title: "Vit A", value: consumedVitaminA, unit: "mcg")
+                    MicroCard(title: "Vit C", value: consumedVitaminC, unit: "mg")
+                    MicroCard(title: "Vit D", value: consumedVitaminD, unit: "mcg")
+                    MicroCard(title: "Calcium", value: consumedCalcium, unit: "mg")
+                    MicroCard(title: "Iron", value: consumedIron, unit: "mg")
+                    MicroCard(title: "Potassium", value: consumedPotassium, unit: "mg")
+                    MicroCard(title: "Magnesium", value: consumedMagnesium, unit: "mg")
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 8)
+            }
+        }
+        .padding(.vertical, 8)
+        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .cornerRadius(20)
+        .padding(.horizontal, 24)
     }
     
     private var actionsSection: some View {
@@ -353,5 +405,28 @@ struct DailyDashboardView: View {
         let hoursSinceLastMeal = pastMeals.first.map { Date().timeIntervalSince($0.consumedAt) / 3600.0 } ?? 0
         let calsLeft = max(0, Int(dynamicTarget - consumedCalories))
         LiveActivityManager.shared.updateOrStartFastingActivity(caloriesLeft: calsLeft, fastingHours: hoursSinceLastMeal)
+}
+
+struct MicroCard: View {
+    let title: String
+    let value: Double
+    let unit: String
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 4) {
+            Text(title)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text(value > 0 ? "\(value, specifier: "%.1f")" : "—")
+                .font(.subheadline)
+                .fontWeight(.bold)
+            Text(unit)
+                .font(.system(size: 9))
+                .foregroundColor(.secondary)
+        }
+        .frame(width: 70)
+        .padding(.vertical, 8)
+        .background(Color(UIColor.tertiarySystemGroupedBackground))
+        .cornerRadius(12)
     }
 }

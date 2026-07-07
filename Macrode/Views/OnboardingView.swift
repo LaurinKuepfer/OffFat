@@ -17,6 +17,7 @@ struct OnboardingView: View {
     
     @State private var goal: GoalType = .maintain
     @State private var activityLevel: ActivityLevel = .sedentary
+    @State private var dietTemplate: DietTemplate = .balanced
     
     enum GoalType: String, CaseIterable {
         case lose = "Lose Weight"
@@ -60,9 +61,26 @@ struct OnboardingView: View {
         if goal == .lose { tdee -= 500 }
         if goal == .gain { tdee += 300 }
         
-        let proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+        let proteinPerKg: Double
+        let fatPercentage: Double
+        
+        switch dietTemplate {
+        case .balanced:
+            proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+            fatPercentage = 0.25
+        case .lowCarb:
+            proteinPerKg = 2.2
+            fatPercentage = 0.35
+        case .keto:
+            proteinPerKg = 1.8
+            fatPercentage = 0.70
+        case .highProtein:
+            proteinPerKg = 2.4
+            fatPercentage = 0.25
+        }
+        
         let protein = round(w * proteinPerKg)
-        let fat = round((tdee * 0.25) / 9.0)
+        let fat = round((tdee * fatPercentage) / 9.0)
         let remainingCals = tdee - (protein * 4.0) - (fat * 9.0)
         let carbs = round(max(0, remainingCals / 4.0))
         
@@ -289,6 +307,16 @@ struct OnboardingView: View {
                         }
                     }
                 }
+                
+                Text("Diet Template").font(.headline).padding(.top, 8)
+                
+                Picker("Diet Template", selection: $dietTemplate) {
+                    ForEach(DietTemplate.allCases, id: \.self) { type in Text(LocalizedStringKey(type.rawValue)).tag(type) }
+                }
+                .pickerStyle(.menu)
+                .padding()
+                .background(Color.secondary.opacity(0.06))
+                .cornerRadius(12)
             }
             .padding(24)
             .background(.ultraThinMaterial)

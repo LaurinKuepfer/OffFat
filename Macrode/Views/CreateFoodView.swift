@@ -13,6 +13,8 @@ struct CreateFoodView: View {
     var selectedDate: Date = Date()
     @Binding var mainTabSelection: Int
     
+    @AppStorage("enableMicronutrients") private var enableMicronutrients = false
+    
     @State private var name: String = ""
     @State private var calories: Double?
     @State private var protein: Double?
@@ -22,6 +24,13 @@ struct CreateFoodView: View {
     @State private var sugar: Double?
     @State private var saturatedFat: Double?
     @State private var sodium: Double?
+    @State private var vitaminA: Double?
+    @State private var vitaminC: Double?
+    @State private var vitaminD: Double?
+    @State private var calcium: Double?
+    @State private var iron: Double?
+    @State private var potassium: Double?
+    @State private var magnesium: Double?
     @State private var householdUnitName: String = ""
     @State private var householdUnitWeightGrams: Double?
     @State private var isDrink: Bool = false
@@ -143,6 +152,18 @@ struct CreateFoodView: View {
                 }
             }
             
+            if enableMicronutrients {
+                Section(header: Text("Advanced Micronutrients")) {
+                    HStack { Text("Vitamin A (mcg)"); Spacer(); TextField("—", value: $vitaminA, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Vitamin C (mg)"); Spacer(); TextField("—", value: $vitaminC, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Vitamin D (mcg)"); Spacer(); TextField("—", value: $vitaminD, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Calcium (mg)"); Spacer(); TextField("—", value: $calcium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Iron (mg)"); Spacer(); TextField("—", value: $iron, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Potassium (mg)"); Spacer(); TextField("—", value: $potassium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Magnesium (mg)"); Spacer(); TextField("—", value: $magnesium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                }
+            }
+            
             Section(header: Text("Household Unit (Optional)"), footer: Text("Configure a custom unit (e.g., '1 Burger' = 150g) to log this item without entering its weight every time.")) {
                 TextField("Unit Name (e.g., Slice, Burger)", text: $householdUnitName)
                     .focused($isInputActive)
@@ -226,12 +247,20 @@ struct CreateFoodView: View {
                 sugar = data.sugar
                 saturatedFat = data.saturatedFat
                 sodium = data.sodium
+                // Since prefilledData type doesn't have the new vitamins yet, we skip them here
                 if categories.contains(data.category) {
                     selectedCategory = data.category
                 }
             } else if let existing = editingFood {
                 householdUnitName = existing.householdUnitName ?? ""
                 householdUnitWeightGrams = existing.householdUnitWeightGrams
+                vitaminA = existing.vitaminA
+                vitaminC = existing.vitaminC
+                vitaminD = existing.vitaminD
+                calcium = existing.calcium
+                iron = existing.iron
+                potassium = existing.potassium
+                magnesium = existing.magnesium
             }
             selectedMealCategory = autoMealCategory(for: selectedDate)
         }
@@ -263,6 +292,13 @@ struct CreateFoodView: View {
             existing.sugar = sugar
             existing.saturatedFat = saturatedFat
             existing.sodium = sodium
+            existing.vitaminA = vitaminA
+            existing.vitaminC = vitaminC
+            existing.vitaminD = vitaminD
+            existing.calcium = calcium
+            existing.iron = iron
+            existing.potassium = potassium
+            existing.magnesium = magnesium
             existing.householdUnitName = householdUnitName.isEmpty ? nil : householdUnitName
             existing.householdUnitWeightGrams = householdUnitWeightGrams
             if let b = prefilledData?.barcode { existing.barcode = b }
@@ -290,6 +326,13 @@ struct CreateFoodView: View {
                 householdUnitName: householdUnitName.isEmpty ? nil : householdUnitName,
                 householdUnitWeightGrams: householdUnitWeightGrams
             )
+            newFood.vitaminA = vitaminA
+            newFood.vitaminC = vitaminC
+            newFood.vitaminD = vitaminD
+            newFood.calcium = calcium
+            newFood.iron = iron
+            newFood.potassium = potassium
+            newFood.magnesium = magnesium
             context.insert(newFood)
             finalFood = newFood
         }
@@ -316,6 +359,13 @@ struct CreateFoodView: View {
             saturatedFat: food.saturatedFat,
             sodium: food.sodium
         )
+        meal.vitaminA = food.vitaminA
+        meal.vitaminC = food.vitaminC
+        meal.vitaminD = food.vitaminD
+        meal.calcium = food.calcium
+        meal.iron = food.iron
+        meal.potassium = food.potassium
+        meal.magnesium = food.magnesium
         context.insert(meal)
         HealthKitManager.shared.saveMeal(
             name: food.name,

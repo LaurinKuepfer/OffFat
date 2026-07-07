@@ -9,6 +9,7 @@ class CalculatorViewModel {
     var heightCM: Double?
     var weightKG: Double?
     var activityLevel: CalculatorView.ActivityLevel = .sedentary
+    var dietTemplate: DietTemplate = .balanced
     
     func load(from log: DailyLog) {
         if let w = log.bodyWeight {
@@ -37,9 +38,26 @@ class CalculatorViewModel {
         if goal == .lose { tdee -= 500 }
         if goal == .gain { tdee += 300 }
         
-        let proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+        let proteinPerKg: Double
+        let fatPercentage: Double
+        
+        switch dietTemplate {
+        case .balanced:
+            proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+            fatPercentage = 0.25
+        case .lowCarb:
+            proteinPerKg = 2.2
+            fatPercentage = 0.35
+        case .keto:
+            proteinPerKg = 1.8
+            fatPercentage = 0.70
+        case .highProtein:
+            proteinPerKg = 2.4
+            fatPercentage = 0.25
+        }
+        
         let proteinTarget = round(w * proteinPerKg)
-        let fatTarget = round((tdee * 0.25) / 9.0)
+        let fatTarget = round((tdee * fatPercentage) / 9.0)
         let remainingCals = tdee - (proteinTarget * 4.0) - (fatTarget * 9.0)
         
         if remainingCals < 0 {
@@ -72,9 +90,26 @@ class CalculatorViewModel {
         if goal == .lose { tdee -= 500 }
         if goal == .gain { tdee += 300 }
         
-        let proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+        let proteinPerKg: Double
+        let fatPercentage: Double
+        
+        switch dietTemplate {
+        case .balanced:
+            proteinPerKg = (activityLevel == .active || activityLevel == .athlete || goal == .gain) ? 2.0 : 1.6
+            fatPercentage = 0.25
+        case .lowCarb:
+            proteinPerKg = 2.2
+            fatPercentage = 0.35
+        case .keto:
+            proteinPerKg = 1.8
+            fatPercentage = 0.70
+        case .highProtein:
+            proteinPerKg = 2.4
+            fatPercentage = 0.25
+        }
+        
         var proteinTarget = round(w * proteinPerKg)
-        var fatTarget = round((tdee * 0.25) / 9.0)
+        var fatTarget = round((tdee * fatPercentage) / 9.0)
         let remainingCals = tdee - (proteinTarget * 4.0) - (fatTarget * 9.0)
         
         var roundedTdee = round(tdee)

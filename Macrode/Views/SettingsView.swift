@@ -11,10 +11,13 @@ struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     
     @AppStorage("isProactiveCoachEnabled") private var isProactiveCoachEnabled = false
+    @AppStorage("isAdaptiveCoachingEnabled") private var isAdaptiveCoachingEnabled = false
     @AppStorage("hasCompletedTutorial") private var hasCompletedTutorial: Bool = true
     @AppStorage("appLanguage", store: UserDefaults(suiteName: "group.com.kuepferlaurin.macrode")) private var appLanguage: String = "system"
     @AppStorage("userGoal") private var userGoal: GoalType = .maintain
     @AppStorage("hasDismissedWidgetPromo") private var hasDismissedWidgetPromo = false
+    @AppStorage("enableFasting") private var enableFasting = false
+    @AppStorage("enableMicronutrients") private var enableMicronutrients = false
 
     var body: some View {
         NavigationStack {
@@ -118,6 +121,27 @@ struct SettingsView: View {
                 } else {
                     NotificationManager.shared.cancelNotifications()
                 }
+            }
+            
+            Toggle(isOn: $isAdaptiveCoachingEnabled) {
+                Label("Adaptive TDEE Coaching", systemImage: "brain.head.profile")
+            }
+            .onChange(of: isAdaptiveCoachingEnabled) { _, _ in
+                HapticManager.shared.impact(.light)
+            }
+            
+            Toggle(isOn: $enableFasting) {
+                Label("Intermittent Fasting", systemImage: "timer")
+            }
+            .onChange(of: enableFasting) { _, _ in
+                HapticManager.shared.impact(.light)
+            }
+            
+            Toggle(isOn: $enableMicronutrients) {
+                Label("Advanced Micronutrients", systemImage: "pills.fill")
+            }
+            .onChange(of: enableMicronutrients) { _, _ in
+                HapticManager.shared.impact(.light)
             }
         } header: {
             Label("Preferences", systemImage: "gearshape.fill")

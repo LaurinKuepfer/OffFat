@@ -18,6 +18,13 @@ final class FoodItem {
     var sugar: Double?
     var saturatedFat: Double?
     var sodium: Double?
+    var vitaminA: Double?
+    var vitaminC: Double?
+    var vitaminD: Double?
+    var calcium: Double?
+    var iron: Double?
+    var potassium: Double?
+    var magnesium: Double?
     
     var imageUrl: String?
     var nutriscore: String?
@@ -169,6 +176,13 @@ final class ConsumedMeal {
     var sugar: Double?
     var saturatedFat: Double?
     var sodium: Double?
+    var vitaminA: Double?
+    var vitaminC: Double?
+    var vitaminD: Double?
+    var calcium: Double?
+    var iron: Double?
+    var potassium: Double?
+    var magnesium: Double?
     
     init(id: UUID = UUID(), name: String, calories: Double, protein: Double, carbs: Double, fat: Double, weightGrams: Double = 100, consumedAt: Date = Date(), mealCategory: String = "Snack", fiber: Double? = nil, sugar: Double? = nil, saturatedFat: Double? = nil, sodium: Double? = nil) {
         self.id = id
@@ -213,4 +227,11 @@ public enum GoalType: String, CaseIterable, Sendable {
     case lose = "Lose Weight"
     case maintain = "Maintain"
     case gain = "Build Muscle"
+}
+
+public enum DietTemplate: String, CaseIterable, Sendable {
+    case balanced = "Balanced"
+    case lowCarb = "Low Carb"
+    case keto = "Keto"
+    case highProtein = "High Protein"
 }

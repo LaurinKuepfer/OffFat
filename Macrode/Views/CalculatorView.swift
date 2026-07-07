@@ -54,6 +54,10 @@ struct CalculatorView: View {
                     Picker("Activity", selection: $viewModel.activityLevel) {
                         ForEach(ActivityLevel.allCases, id: \.self) { type in Text(LocalizedStringKey(type.rawValue)).tag(type) }
                     }.pickerStyle(.menu)
+                    
+                    Picker("Diet Template", selection: $viewModel.dietTemplate) {
+                        ForEach(DietTemplate.allCases, id: \.self) { type in Text(LocalizedStringKey(type.rawValue)).tag(type) }
+                    }.pickerStyle(.menu)
                 }
                 
                 Section(footer: Text("This will recalculate and overwrite your macro targets for today.")) {

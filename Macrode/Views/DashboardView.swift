@@ -11,6 +11,7 @@ struct DashboardView: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     @AppStorage("firstLaunchDate") private var firstLaunchDate: Double = Date().timeIntervalSince1970
     @AppStorage("hasCompletedTutorial") private var hasCompletedTutorial: Bool = false
+    @AppStorage("enableFasting") private var enableFasting = false
 
     @Binding var selectedDate: Date
     @Binding var selectedTab: Int
@@ -61,6 +62,10 @@ struct DashboardView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         WeeklyCalendarView(selectedDate: $selectedDate, showingHistorySheet: $showingHistorySheet, goalsMetCache: goalsMetCache, firstLaunchDate: firstLaunchDate).padding(.top, 6)
+                        
+                        if enableFasting {
+                            FastingWidgetView()
+                        }
                         
                         DailyDashboardView(selectedDate: selectedDate, currentLog: currentLog, allSupplements: allSupplements)
                     }
