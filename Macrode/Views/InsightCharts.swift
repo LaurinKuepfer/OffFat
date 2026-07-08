@@ -69,8 +69,7 @@ struct WeightTrackerCard: View {
     var currentLog: DailyLog?
     var selectedDate: Date
     
-    @State private var showingWeightAlert = false
-    @State private var weightInput: String = ""
+    @State private var showingMeasurementsSheet = false
     
     private var smoothedData: [(Date, Double)] {
         let logsWithWeight = dailyLogs.filter { $0.bodyWeight != nil }.sorted(by: { $0.date < $1.date })
@@ -99,15 +98,14 @@ struct WeightTrackerCard: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Image(systemName: "scalemass.fill").foregroundColor(.purple)
-                    Text("Body Weight").font(.headline)
+                    Image(systemName: "ruler.fill").foregroundColor(.purple)
+                    Text("Measurements").font(.headline)
                     Spacer()
                     Button(action: {
                         HapticManager.shared.impact(.light)
-                        weightInput = currentLog?.bodyWeight.map { String($0) } ?? ""
-                        showingWeightAlert = true
+                        showingMeasurementsSheet = true
                     }) {
-                        Text(currentLog?.bodyWeight.map { "\($0, specifier: "%.1f") kg" } ?? "Log Weight")
+                        Text(currentLog?.bodyWeight.map { "\($0, specifier: "%.1f") kg" } ?? "Log Metrics")
                             .font(.subheadline).fontWeight(.bold).foregroundColor(currentLog?.bodyWeight != nil ? .primary : .white)
                             .padding(.horizontal, 12).padding(.vertical, 6).background(currentLog?.bodyWeight != nil ? Color.secondary.opacity(0.2) : Color.purple).cornerRadius(8)
                     }
@@ -155,21 +153,10 @@ struct WeightTrackerCard: View {
         .background(Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-        .padding(.horizontal, 24)
-        .alert("Log Body Weight", isPresented: $showingWeightAlert) {
-            TextField("Weight (e.g. 75.5)", text: $weightInput).keyboardType(.decimalPad)
-            Button("Save") {
-                if let weight = Double(weightInput.replacingOccurrences(of: ",", with: ".")) {
-                    HapticManager.shared.impact(.light)
-                    withAnimation { 
-                        currentLog?.bodyWeight = weight
-                        let newWaterTarget = Int((weight / 20.0) * 1000)
-                        currentLog?.waterTargetML = newWaterTarget
-                    }
-                    try? context.save()
-                }
+        .sheet(isPresented: $showingMeasurementsSheet) {
+            if let log = currentLog {
+                MeasurementsSheet(log: log)
             }
-            Button("Cancel", role: .cancel) { }
-        } message: { Text("Enter your weight for \(selectedDate.formatted(.dateTime.month().day())).") }
+        }
     }
 }

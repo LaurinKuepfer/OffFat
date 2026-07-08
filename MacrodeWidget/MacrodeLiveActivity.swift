@@ -14,7 +14,11 @@ struct MacrodeLiveActivity: Widget {
                 Spacer()
                 VStack(alignment: .trailing) {
                     Image(systemName: "timer").foregroundColor(.purple)
-                    Text(String(format: "%.1fh fasting", context.state.fastingHours)).font(.subheadline)
+                    if context.state.fastingTargetHours > 0 {
+                        Text(String(format: "%.1fh / %.0fh", context.state.fastingHours, context.state.fastingTargetHours)).font(.subheadline)
+                    } else {
+                        Text(String(format: "%.1fh fasting", context.state.fastingHours)).font(.subheadline)
+                    }
                 }
             }
             .padding()
@@ -38,6 +42,12 @@ struct MacrodeLiveActivity: Widget {
                     .padding(.trailing, 8)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
+                    if context.state.fastingTargetHours > 0 {
+                        ProgressView(value: min(1.0, context.state.fastingHours / context.state.fastingTargetHours))
+                            .progressViewStyle(.linear)
+                            .tint(.purple)
+                            .padding(.horizontal)
+                    }
                 }
             } compactLeading: {
                 HStack(spacing: 4) {

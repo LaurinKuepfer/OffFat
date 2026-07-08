@@ -19,6 +19,8 @@ struct SettingsView: View {
     @AppStorage("enableFasting") private var enableFasting = false
     @AppStorage("enableMicronutrients") private var enableMicronutrients = false
 
+    @State private var showingWeeklyReport = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -47,6 +49,9 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $showingWeeklyReport) {
+                WeeklyReportView()
+            }
             .fileExporter(
                 isPresented: $viewModel.showingExporter,
                 document: viewModel.csvDocument,
@@ -130,11 +135,12 @@ struct SettingsView: View {
                 HapticManager.shared.impact(.light)
             }
             
-            Toggle(isOn: $enableFasting) {
-                Label("Intermittent Fasting", systemImage: "timer")
+            NavigationLink(destination: MacroCyclingSettingsView()) {
+                Label("Macro Cycling", systemImage: "arrow.triangle.2.circlepath")
             }
-            .onChange(of: enableFasting) { _, _ in
-                HapticManager.shared.impact(.light)
+            
+            NavigationLink(destination: FastingScheduleSettingsView()) {
+                Label("Intermittent Fasting", systemImage: "timer")
             }
             
             Toggle(isOn: $enableMicronutrients) {
@@ -187,6 +193,10 @@ struct SettingsView: View {
     
     private var dataSection: some View {
         Section {
+            Button(action: { showingWeeklyReport = true }) {
+                Label("Weekly Progress Report", systemImage: "chart.bar.doc.horizontal")
+            }
+            
             Button(action: { viewModel.prepareExport(allMeals: allMeals) }) {
                 Label("Export Backup (.csv)", systemImage: "square.and.arrow.up")
                     .foregroundColor(.primary)

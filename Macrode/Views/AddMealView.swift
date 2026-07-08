@@ -20,6 +20,7 @@ struct AddMealView: View {
     @Query(sort: \FoodItem.name) private var foodLibrary: [FoodItem]
     @Query(sort: \RecipeItem.name) private var recipeLibrary: [RecipeItem]
     @Query(sort: \ConsumedMeal.consumedAt, order: .reverse) private var recentMeals: [ConsumedMeal]
+    @State private var showingWebImport = false
     
     private var recentFoods: [FoodItem] {
         var foods: [FoodItem] = []
@@ -146,7 +147,16 @@ struct AddMealView: View {
                             Button(action: { viewModel.prefilledAPIResult = nil; viewModel.navigateToCreateFood = true }) { Image(systemName: "plus") }
                         }
                     } else {
-                        NavigationLink(destination: CreateRecipeView()) { Image(systemName: "plus") }
+                        Menu {
+                            NavigationLink(destination: CreateRecipeView()) {
+                                Label("Create Manually", systemImage: "pencil")
+                            }
+                            Button(action: { showingWebImport = true }) {
+                                Label("Import from Web", systemImage: "globe")
+                            }
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
@@ -161,6 +171,9 @@ struct AddMealView: View {
                 set: { viewModel.onlineSearchQuery = $0 }
             )) { query in
                 OnlineSearchResultsView(query: query)
+            }
+            .sheet(isPresented: $showingWebImport) {
+                WebRecipeImportView()
             }
             .sheet(isPresented: $viewModel.isShowingScanner) { ScannerView(scannedBarcode: $viewModel.scannedBarcode).ignoresSafeArea() }
             .onChange(of: viewModel.scannedBarcode) { _, newValue in if let barcode = newValue { viewModel.fetchFromOpenFoodFacts(barcode: barcode, foodLibrary: foodLibrary) } }

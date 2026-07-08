@@ -21,15 +21,36 @@ class DashboardViewModel {
         let tdeeResult = MetabolismEngine.calculateTrueTDEE(dailyLogs: logsData, allMeals: mealsData)
         self.cachedTDEE = tdeeResult
         
-        // Dynamic Coaching
-        let isAdaptiveCoachingEnabled = UserDefaults.standard.bool(forKey: "isAdaptiveCoachingEnabled")
-        let templateStr = UserDefaults.standard.string(forKey: "dietTemplate") ?? DietTemplate.balanced.rawValue
-        let template = DietTemplate(rawValue: templateStr) ?? .balanced
+        let startOfDay = Calendar.current.startOfDay(for: selectedDate)
+        guard let todayLog = allDailyLogs.first(where: { Calendar.current.isDate($0.date, inSameDayAs: startOfDay) }) else { return }
         
-        if isAdaptiveCoachingEnabled, let trueTdee = tdeeResult.tdee {
-            let startOfDay = Calendar.current.startOfDay(for: selectedDate)
-            if let todayLog = allDailyLogs.first(where: { Calendar.current.isDate($0.date, inSameDayAs: startOfDay) }) {
-                
+        var appliedMacroCycling = false
+        if let context = todayLog.modelContext {
+            let desc = FetchDescriptor<WeeklyMacroSchedule>()
+            if let schedule = (try? context.fetch(desc))?.first, schedule.isActive {
+                let weekday = Calendar.current.component(.weekday, from: selectedDate)
+                switch weekday {
+                case 1: todayLog.calorieTarget = schedule.sunCalories; todayLog.proteinTarget = schedule.sunProtein; todayLog.carbsTarget = schedule.sunCarbs; todayLog.fatTarget = schedule.sunFat
+                case 2: todayLog.calorieTarget = schedule.monCalories; todayLog.proteinTarget = schedule.monProtein; todayLog.carbsTarget = schedule.monCarbs; todayLog.fatTarget = schedule.monFat
+                case 3: todayLog.calorieTarget = schedule.tueCalories; todayLog.proteinTarget = schedule.tueProtein; todayLog.carbsTarget = schedule.tueCarbs; todayLog.fatTarget = schedule.tueFat
+                case 4: todayLog.calorieTarget = schedule.wedCalories; todayLog.proteinTarget = schedule.wedProtein; todayLog.carbsTarget = schedule.wedCarbs; todayLog.fatTarget = schedule.wedFat
+                case 5: todayLog.calorieTarget = schedule.thuCalories; todayLog.proteinTarget = schedule.thuProtein; todayLog.carbsTarget = schedule.thuCarbs; todayLog.fatTarget = schedule.thuFat
+                case 6: todayLog.calorieTarget = schedule.friCalories; todayLog.proteinTarget = schedule.friProtein; todayLog.carbsTarget = schedule.friCarbs; todayLog.fatTarget = schedule.friFat
+                case 7: todayLog.calorieTarget = schedule.satCalories; todayLog.proteinTarget = schedule.satProtein; todayLog.carbsTarget = schedule.satCarbs; todayLog.fatTarget = schedule.satFat
+                default: break
+                }
+                appliedMacroCycling = true
+                try? context.save()
+            }
+        }
+        
+        if !appliedMacroCycling {
+            // Dynamic Coaching
+            let isAdaptiveCoachingEnabled = UserDefaults.standard.bool(forKey: "isAdaptiveCoachingEnabled")
+            let templateStr = UserDefaults.standard.string(forKey: "dietTemplate") ?? DietTemplate.balanced.rawValue
+            let template = DietTemplate(rawValue: templateStr) ?? .balanced
+            
+            if isAdaptiveCoachingEnabled, let trueTdee = tdeeResult.tdee {
                 var newCalorieTarget = trueTdee
                 if userGoal == .lose { newCalorieTarget -= 500 }
                 if userGoal == .gain { newCalorieTarget += 300 }
@@ -40,7 +61,7 @@ class DashboardViewModel {
                 
                 switch template {
                 case .balanced:
-                    proteinPerKg = (userGoal == .gain) ? 2.0 : 1.6 // simplified
+                    proteinPerKg = (userGoal == .gain) ? 2.0 : 1.6
                     fatPercentage = 0.25
                 case .lowCarb:
                     proteinPerKg = 2.2
@@ -67,7 +88,6 @@ class DashboardViewModel {
                     carbsTarget = round(remainingCals / 4.0)
                 }
                 
-                // Only update if there is a significant change (e.g. > 50 kcal) to avoid constant micro-updates
                 if abs(todayLog.calorieTarget - round(newCalorieTarget)) > 50 {
                     todayLog.calorieTarget = round(newCalorieTarget)
                     todayLog.proteinTarget = proteinTarget

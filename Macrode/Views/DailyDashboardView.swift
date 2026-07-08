@@ -404,8 +404,16 @@ struct DailyDashboardView: View {
         let pastMeals = allConsumedMeals.filter { $0.consumedAt < Date() }.sorted { $0.consumedAt > $1.consumedAt }
         let hoursSinceLastMeal = pastMeals.first.map { Date().timeIntervalSince($0.consumedAt) / 3600.0 } ?? 0
         let calsLeft = max(0, Int(dynamicTarget - consumedCalories))
-        LiveActivityManager.shared.updateOrStartFastingActivity(caloriesLeft: calsLeft, fastingHours: hoursSinceLastMeal)
-}
+        
+        var targetHours: Double = 0
+        if UserDefaults.standard.bool(forKey: "enableFasting") {
+            let scheduleStr = UserDefaults.standard.string(forKey: "fastingSchedule") ?? FastingSchedule.off.rawValue
+            let schedule = FastingSchedule(rawValue: scheduleStr) ?? .off
+            targetHours = schedule.targetHours
+        }
+        
+        LiveActivityManager.shared.updateOrStartFastingActivity(caloriesLeft: calsLeft, fastingHours: hoursSinceLastMeal, fastingTargetHours: targetHours)
+    }
 
 struct MicroCard: View {
     let title: String

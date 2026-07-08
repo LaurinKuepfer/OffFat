@@ -18,6 +18,8 @@ struct LogRecipeView: View {
     enum LogMode { case servings, weight }
     @State private var logMode: LogMode = .servings
     @State private var portionWeight: Double? = nil
+    @State private var selectedMealCategory: String = "Snack"
+    @State private var logTime: Date = Date()
     
     private var macroMultiplier: Double {
         if logMode == .weight, let w = portionWeight, let total = recipe.totalCookedWeight, total > 0 {
@@ -140,6 +142,18 @@ struct LogRecipeView: View {
                             }
                         }
                         
+                        Picker("Meal Category", selection: $selectedMealCategory) {
+                            Text("Breakfast").tag("Breakfast")
+                            Text("Lunch").tag("Lunch")
+                            Text("Snack").tag("Snack")
+                            Text("Dinner").tag("Dinner")
+                        }
+                        .pickerStyle(.segmented)
+                        .padding(.vertical, 8)
+                        
+                        DatePicker("Time", selection: $logTime, displayedComponents: .hourAndMinute)
+                            .padding(.vertical, 8)
+                        
                         Button(action: logMeal) {
                             HStack {
                                 Image(systemName: "checkmark.circle.fill")
@@ -176,6 +190,17 @@ struct LogRecipeView: View {
         .sheet(isPresented: $showingEditSheet) {
             EditRecipeView(recipe: recipe)
         }
+        .onAppear {
+            isInputActive = true
+            selectedMealCategory = autoMealCategory(for: selectedDate)
+            logTime = selectedDate
+            if recipe.totalCookedWeight != nil && recipe.totalCookedWeight! > 0 {
+                logMode = .weight
+            } else {
+                logMode = .servings
+                servings = 1
+            }
+        }
     }
     
     private func logMeal() {
@@ -186,8 +211,8 @@ struct LogRecipeView: View {
             carbs: calcCarbs,
             fat: calcFat,
             weightGrams: loggedWeightGrams,
-            consumedAt: selectedDate,
-            mealCategory: autoMealCategory(for: selectedDate)
+            consumedAt: logTime,
+            mealCategory: selectedMealCategory
         )
         context.insert(meal)
         try? context.save()

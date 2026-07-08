@@ -10,9 +10,9 @@ struct OnboardingView: View {
     @FocusState private var isInputActive: Bool
     
     @State private var isMale: Bool = true
-    @State private var age: String = ""
-    @State private var heightCM: String = ""
-    @State private var weightKG: String = ""
+    @State private var age: Double = 30
+    @State private var heightCM: Double = 170
+    @State private var weightKG: Double = 70.0
     @State private var hasLoggedDummy = false
     
     @State private var goal: GoalType = .maintain
@@ -50,9 +50,9 @@ struct OnboardingView: View {
     }
     
     private var computedMacros: (calories: Double, protein: Double, carbs: Double, fat: Double) {
-        let w = Double(weightKG.replacingOccurrences(of: ",", with: ".")) ?? 70.0
-        let h = Double(heightCM) ?? 170.0
-        let a = Double(age) ?? 30.0
+        let w = weightKG
+        let h = heightCM
+        let a = age
         
         var bmr = (10.0 * w) + (6.25 * h) - (5.0 * a)
         bmr += isMale ? 5.0 : -161.0
@@ -209,17 +209,9 @@ struct OnboardingView: View {
                 }
                 .pickerStyle(.segmented)
                 
-                InputField(icon: "calendar", placeholder: "Age (Years)", text: $age)
-                    .keyboardType(.numberPad)
-                    .focused($isInputActive)
-                
-                InputField(icon: "ruler", placeholder: "Height (cm)", text: $heightCM)
-                    .keyboardType(.numberPad)
-                    .focused($isInputActive)
-                
-                InputField(icon: "scalemass", placeholder: "Current Weight (kg)", text: $weightKG)
-                    .keyboardType(.decimalPad)
-                    .focused($isInputActive)
+                ValueSlider(title: "Age", icon: "calendar", value: $age, range: 10...120, step: 1, unit: " y", format: "%.0f")
+                ValueSlider(title: "Height", icon: "ruler", value: $heightCM, range: 100...250, step: 1, unit: " cm", format: "%.0f")
+                ValueSlider(title: "Weight", icon: "scalemass", value: $weightKG, range: 30...200, step: 0.5, unit: " kg", format: "%.1f")
             }
             .padding(24)
             .background(.ultraThinMaterial)
@@ -230,7 +222,6 @@ struct OnboardingView: View {
             Spacer()
             
             nextButton(title: "Continue")
-                .disabled(age.isEmpty || heightCM.isEmpty || weightKG.isEmpty)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
         }
@@ -470,7 +461,7 @@ struct OnboardingView: View {
         playHaptic()
         
         let macros = computedMacros
-        let w = Double(weightKG.replacingOccurrences(of: ",", with: ".")) ?? 70.0
+        let w = weightKG
         let water = Int((w / 20.0) * 1000)
         
         let startOfToday = Calendar.current.startOfDay(for: Date())
@@ -512,17 +503,30 @@ struct OnboardingView: View {
 
 // MARK: - REUSABLE SUBVIEWS
 
-struct InputField: View {
+struct ValueSlider: View {
+    let title: String
     let icon: String
-    let placeholder: String
-    @Binding var text: String
+    @Binding var value: Double
+    let range: ClosedRange<Double>
+    let step: Double
+    let unit: String
+    let format: String
     
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .foregroundColor(.secondary)
-                .frame(width: 20)
-            TextField(LocalizedStringKey(placeholder), text: $text)
+        VStack(spacing: 8) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundColor(.secondary)
+                    .frame(width: 20)
+                Text(LocalizedStringKey(title))
+                    .foregroundColor(.primary)
+                Spacer()
+                Text(String(format: format, value) + unit)
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            Slider(value: $value, in: range, step: step)
+                .accentColor(.green)
         }
         .padding()
         .background(.ultraThinMaterial)
