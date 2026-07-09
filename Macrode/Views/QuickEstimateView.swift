@@ -101,7 +101,7 @@ struct QuickEstimateView: View {
                         mealCategory: autoMealCategory(for: selectedDate)
                     )
                     context.insert(meal)
-                    try? context.save()
+                    context.safeSave()
                     
                     HapticManager.shared.notification(.success)
                     HealthKitManager.shared.saveMeal(

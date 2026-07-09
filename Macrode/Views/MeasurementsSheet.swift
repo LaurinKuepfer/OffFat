@@ -86,6 +86,6 @@ struct MeasurementsSheet: View {
         if let n = Double(neckStr.replacingOccurrences(of: ",", with: ".")) { log.neckCircumference = n } else if neckStr.isEmpty { log.neckCircumference = nil }
         if let c = Double(chestStr.replacingOccurrences(of: ",", with: ".")) { log.chestCircumference = c } else if chestStr.isEmpty { log.chestCircumference = nil }
         
-        try? context.save()
+        context.safeSave()
     }
 }

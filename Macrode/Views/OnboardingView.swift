@@ -404,7 +404,7 @@ struct OnboardingView: View {
                         playHaptic()
                     }
                 }) {
-                    Text("Log a Banana 🍌 (105 kcal)")
+                    Text("Log a Banana ðŸŒ (105 kcal)")
                         .font(.headline)
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
@@ -489,7 +489,7 @@ struct OnboardingView: View {
             context.insert(newLog)
         }
         
-        try? context.save()
+        context.safeSave()
         WidgetCenter.shared.reloadAllTimelines()
         
         withAnimation(.spring()) { hasSeenOnboarding = true }

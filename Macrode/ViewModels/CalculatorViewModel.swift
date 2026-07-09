@@ -137,6 +137,6 @@ class CalculatorViewModel {
         dailyLog.bodyWeight = w
         dailyLog.waterTargetML = Int((w / 20.0) * 1000)
         
-        try? context.save()
+        context.safeSave()
     }
 }

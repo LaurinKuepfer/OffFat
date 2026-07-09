@@ -17,7 +17,7 @@ struct MacroCyclingSettingsView: View {
                             get: { schedule.isActive },
                             set: { newValue in
                                 schedule.isActive = newValue
-                                try? context.save()
+                                context.safeSave()
                             }
                         ))
                     }
@@ -46,7 +46,7 @@ struct MacroCyclingSettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
-                        try? context.save()
+                        context.safeSave()
                         dismiss()
                     }
                 }

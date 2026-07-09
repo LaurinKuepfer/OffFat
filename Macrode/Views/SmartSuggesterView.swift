@@ -125,7 +125,7 @@ struct SmartSuggesterView: View {
                 }
             }
             }
-            .navigationTitle("Smart Suggester 🪄")
+            .navigationTitle("Smart Suggester ðŸª„")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -164,7 +164,7 @@ struct SmartSuggesterView: View {
                 date: selectedDate
             )
         }
-        try? context.save()
+        context.safeSave()
         WidgetCenter.shared.reloadAllTimelines()
         HapticManager.shared.notification(.success)
         dismiss()

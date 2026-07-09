@@ -102,7 +102,7 @@ struct FastingCompactCard: View {
                         .font(.subheadline).fontWeight(.bold)
                         .contentTransition(.numericText())
                 } else {
-                    Text("—").font(.subheadline).fontWeight(.bold)
+                    Text("â€”").font(.subheadline).fontWeight(.bold)
                 }
             }
             Spacer()
@@ -144,7 +144,7 @@ struct SupplementTrackerCard: View {
                             withAnimation(.spring) {
                                 if isTaken { supp.datesTaken.removeAll(where: { $0 == dateString }) }
                                 else { supp.datesTaken.append(dateString) }
-                                try? context.save()
+                                context.safeSave()
                             }
                         }) {
                             HStack {
@@ -185,7 +185,7 @@ struct FrequentMealsCard: View {
                                     let now = Date()
                                     let newMeal = ConsumedMeal(name: meal.name, calories: meal.calories, protein: meal.protein, carbs: meal.carbs, fat: meal.fat, weightGrams: meal.weightGrams, consumedAt: now, mealCategory: autoMealCategory(for: now), fiber: meal.fiber, sugar: meal.sugar, saturatedFat: meal.saturatedFat, sodium: meal.sodium)
                                     context.insert(newMeal)
-                                    try? context.save()
+                                    context.safeSave()
                                     HealthKitManager.shared.saveMeal(name: meal.name, calories: meal.calories, protein: meal.protein, carbs: meal.carbs, fat: meal.fat, date: now)
                                     Task { WidgetCenter.shared.reloadAllTimelines() }
                                 }) {
@@ -295,7 +295,7 @@ struct MealTimeline: View {
             sodium: meal.sodium
         )
         withAnimation { context.insert(copy) }
-        try? context.save()
+        context.safeSave()
         Task { WidgetCenter.shared.reloadAllTimelines() }
         updateLiveActivity()
     }
@@ -303,7 +303,7 @@ struct MealTimeline: View {
     private func deleteMeal(_ meal: ConsumedMeal) { 
         HapticManager.shared.impact(.light)
         withAnimation { context.delete(meal) }
-        try? context.save()
+        context.safeSave()
         Task { WidgetCenter.shared.reloadAllTimelines() }
         updateLiveActivity()
     }

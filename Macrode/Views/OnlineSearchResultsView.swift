@@ -40,7 +40,7 @@ struct OnlineSearchResultsView: View {
                     Button(action: {
                         let newFood = FoodItem(name: res.name, calories: res.calories, protein: res.protein, carbs: res.carbs, fat: res.fat, barcode: nil, category: res.category, fiber: res.fiber, sugar: res.sugar, saturatedFat: res.saturatedFat, sodium: res.sodium, imageUrl: res.imageUrl, nutriscore: res.nutriscore, ecoscore: res.ecoscore, novaGroup: res.novaGroup, ingredients: res.ingredients, allergens: res.allergens, brand: res.brand)
                         context.insert(newFood)
-                        try? context.save()
+                        context.safeSave()
                         HapticManager.shared.impact(.light)
                         dismiss()
                     }) {
@@ -57,7 +57,7 @@ struct OnlineSearchResultsView: View {
                             }
                             HStack(spacing: 8) {
                                 Text("\(Int(res.calories)) kcal").foregroundColor(.green)
-                                Text("•  \(Int(res.protein))g P | \(Int(res.carbs))g C | \(Int(res.fat))g F").foregroundColor(.secondary)
+                                Text("â€¢  \(Int(res.protein))g P | \(Int(res.carbs))g C | \(Int(res.fat))g F").foregroundColor(.secondary)
                             }
                             .font(.caption)
                         }

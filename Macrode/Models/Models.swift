@@ -134,7 +134,7 @@ final class Supplement {
 
 @Model
 final class DailyLog {
-    var id: UUID
+    @Attribute(.unique) var id: UUID
     @Attribute(.unique) var date: Date
     var calorieTarget: Double
     var proteinTarget: Double

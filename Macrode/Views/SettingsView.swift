@@ -99,8 +99,8 @@ struct SettingsView: View {
                 Text("System").tag("system")
                 Text("English").tag("en")
                 Text("Deutsch").tag("de")
-                Text("Español").tag("es")
-                Text("Français").tag("fr")
+                Text("EspaÃ±ol").tag("es")
+                Text("FranÃ§ais").tag("fr")
             } label: {
                 Label("Language", systemImage: "globe")
             }
@@ -167,17 +167,22 @@ struct SettingsView: View {
                 }
             }
             .padding(.vertical, 4)
-            Text("Long-press your Home Screen → tap **+** in the top-left → search **Macrode** to add widgets.")
+            Text("Long-press your Home Screen â†’ tap **+** in the top-left â†’ search **Macrode** to add widgets.")
                 .font(.caption)
                 .foregroundColor(.secondary)
                 
             Button(action: {
                 HapticManager.shared.impact(.light)
-                HealthKitManager.shared.requestAuthorization { success, error in
-                    if success { 
-                        viewModel.showAlert(title: String.localizing( "Connected!"), message: String.localizing( "Macrode will now sync your meals directly to Apple Health.")) 
-                    } else { 
-                        viewModel.showAlert(title: String.localizing( "Error"), message: error?.localizedDescription ?? String.localizing( "Could not connect to Apple Health.")) 
+                Task {
+                    do {
+                        try await HealthKitManager.shared.requestAuthorization()
+                        await MainActor.run {
+                            viewModel.showAlert(title: String.localizing("Connected!"), message: String.localizing("Macrode will now sync your meals directly to Apple Health."))
+                        }
+                    } catch {
+                        await MainActor.run {
+                            viewModel.showAlert(title: String.localizing("Error"), message: error.localizedDescription)
+                        }
                     }
                 }
             }) {

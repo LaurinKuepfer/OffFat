@@ -266,7 +266,7 @@ struct DashboardView: View {
                 let newLog = DailyLog(date: startOfDay)
                 context.insert(newLog)
             }
-            try? context.save()
+            context.safeSave()
         }
     }
 

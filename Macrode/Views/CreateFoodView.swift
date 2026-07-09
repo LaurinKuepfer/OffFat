@@ -121,7 +121,7 @@ struct CreateFoodView: View {
                         HStack {
                             Text("Fiber (g)")
                             Spacer()
-                            TextField("—", value: $fiber, format: .number)
+                            TextField("â€”", value: $fiber, format: .number)
                                 .keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing).foregroundColor(.brown)
                         }
                     }
@@ -129,7 +129,7 @@ struct CreateFoodView: View {
                         HStack {
                             Text("Sugar (g)")
                             Spacer()
-                            TextField("—", value: $sugar, format: .number)
+                            TextField("â€”", value: $sugar, format: .number)
                                 .keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing).foregroundColor(.pink)
                         }
                     }
@@ -137,7 +137,7 @@ struct CreateFoodView: View {
                         HStack {
                             Text("Saturated Fat (g)")
                             Spacer()
-                            TextField("—", value: $saturatedFat, format: .number)
+                            TextField("â€”", value: $saturatedFat, format: .number)
                                 .keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing).foregroundColor(.orange)
                         }
                     }
@@ -145,7 +145,7 @@ struct CreateFoodView: View {
                         HStack {
                             Text("Sodium (g)")
                             Spacer()
-                            TextField("—", value: $sodium, format: .number)
+                            TextField("â€”", value: $sodium, format: .number)
                                 .keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing).foregroundColor(.gray)
                         }
                     }
@@ -154,13 +154,13 @@ struct CreateFoodView: View {
             
             if enableMicronutrients {
                 Section(header: Text("Advanced Micronutrients")) {
-                    HStack { Text("Vitamin A (mcg)"); Spacer(); TextField("—", value: $vitaminA, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Vitamin C (mg)"); Spacer(); TextField("—", value: $vitaminC, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Vitamin D (mcg)"); Spacer(); TextField("—", value: $vitaminD, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Calcium (mg)"); Spacer(); TextField("—", value: $calcium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Iron (mg)"); Spacer(); TextField("—", value: $iron, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Potassium (mg)"); Spacer(); TextField("—", value: $potassium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
-                    HStack { Text("Magnesium (mg)"); Spacer(); TextField("—", value: $magnesium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Vitamin A (mcg)"); Spacer(); TextField("â€”", value: $vitaminA, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Vitamin C (mg)"); Spacer(); TextField("â€”", value: $vitaminC, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Vitamin D (mcg)"); Spacer(); TextField("â€”", value: $vitaminD, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Calcium (mg)"); Spacer(); TextField("â€”", value: $calcium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Iron (mg)"); Spacer(); TextField("â€”", value: $iron, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Potassium (mg)"); Spacer(); TextField("â€”", value: $potassium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
+                    HStack { Text("Magnesium (mg)"); Spacer(); TextField("â€”", value: $magnesium, format: .number).keyboardType(.decimalPad).focused($isInputActive).multilineTextAlignment(.trailing) }
                 }
             }
             
@@ -336,7 +336,7 @@ struct CreateFoodView: View {
             context.insert(newFood)
             finalFood = newFood
         }
-        try? context.save()
+        context.safeSave()
         HapticManager.shared.notification(.success)
         Task { WidgetCenter.shared.reloadAllTimelines() }
         return finalFood
@@ -375,7 +375,7 @@ struct CreateFoodView: View {
             fat: food.fat,
             date: selectedDate
         )
-        try? context.save()
+        context.safeSave()
         Task { WidgetCenter.shared.reloadAllTimelines() }
         
         mainTabSelection = 0

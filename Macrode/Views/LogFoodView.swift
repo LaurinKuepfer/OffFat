@@ -258,7 +258,7 @@ struct LogFoodView: View {
             sodium: calcSodium
         )
         context.insert(meal)
-        try? context.save()
+        context.safeSave()
         
         HapticManager.shared.notification(.success)
         HealthKitManager.shared.saveMeal(

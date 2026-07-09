@@ -45,12 +45,12 @@ class AddMealViewModel {
     
     func deleteFood(_ food: FoodItem, context: ModelContext) {
         context.delete(food)
-        try? context.save()
+        context.safeSave()
     }
     
     func deleteRecipe(_ recipe: RecipeItem, context: ModelContext) {
         context.delete(recipe)
-        try? context.save()
+        context.safeSave()
     }
     
     private var fetchTask: Task<Void, Never>?

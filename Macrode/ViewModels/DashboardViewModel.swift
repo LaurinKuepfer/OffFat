@@ -3,6 +3,7 @@ import SwiftData
 import SwiftUI
 
 @Observable
+@MainActor
 class DashboardViewModel {
     var cachedTDEE: TDEEResult?
     
@@ -40,7 +41,11 @@ class DashboardViewModel {
                 default: break
                 }
                 appliedMacroCycling = true
-                try? context.save()
+                do {
+                    try context.save()
+                } catch {
+                    print("Failed to save context after applying macro schedule: \(error)")
+                }
             }
         }
         
@@ -95,7 +100,11 @@ class DashboardViewModel {
                     todayLog.fatTarget = fatTarget
                     
                     if let context = todayLog.modelContext {
-                        try? context.save()
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Failed to save context after applying dynamic coaching: \(error)")
+                        }
                     }
                 }
             }

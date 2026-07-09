@@ -395,7 +395,7 @@ struct DailyDashboardView: View {
     private func addWater(_ amount: Int) { 
         playHaptic()
         withAnimation { currentLog.waterML += amount }
-        try? context.save()
+        context.safeSave()
         HealthKitManager.shared.saveWater(amountML: Double(amount), date: Date())
         Task { WidgetCenter.shared.reloadAllTimelines() } 
     }
@@ -425,7 +425,7 @@ struct MicroCard: View {
             Text(title)
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text(value > 0 ? "\(value, specifier: "%.1f")" : "—")
+            Text(value > 0 ? "\(value, specifier: "%.1f")" : "â€”")
                 .font(.subheadline)
                 .fontWeight(.bold)
             Text(unit)

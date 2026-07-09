@@ -131,7 +131,7 @@ struct EditMealView: View {
                         meal.protein = protein
                         meal.carbs = carbs
                         meal.fat = fat
-                        try? context.save()
+                        context.safeSave()
                         HapticManager.shared.notification(.success)
                         Task { WidgetCenter.shared.reloadAllTimelines() } 
                         dismiss()

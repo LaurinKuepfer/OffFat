@@ -67,7 +67,7 @@ class SettingsViewModel {
             for recipe in StarterDatabase.recipes { 
                 context.insert(RecipeItem(name: recipe.name, calories: recipe.calories, protein: recipe.protein, carbs: recipe.carbs, fat: recipe.fat, instructions: recipe.instructions, category: recipe.category, prepTimeMinutes: recipe.prepTimeMinutes, difficulty: recipe.difficulty, systemImage: recipe.systemImage)) 
             }
-            try? context.save()
+            context.safeSave()
         } catch {
             print("Failed to update language database: \(error)")
         }
@@ -143,7 +143,7 @@ class SettingsViewModel {
                     }
                 }
             }
-            try? context.save()
+            context.safeSave()
             showAlert(title: String.localizing( "Import Successful!"), message: String.localizing( "Restored \(importCount) meals to your diary."))
         } catch {
             showAlert(title: String.localizing( "Import Error"), message: error.localizedDescription)

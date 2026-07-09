@@ -115,7 +115,7 @@ struct EditGoalsView: View {
         dailyLog.waterTargetML = max(0, waterTarget)
         dailyLog.isSocialDay = isSocialDay
         
-        try? context.save()
+        context.safeSave()
         WidgetCenter.shared.reloadAllTimelines()
         dismiss()
     }
